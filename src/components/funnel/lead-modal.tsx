@@ -209,13 +209,15 @@ function LeadModal({ open, onClose }: { open: boolean; onClose: () => void }) {
 
         {stage !== "submitting" && (
           <button
-            onClick={onClose}
+            type="button"
+            onClick={close}
             aria-label="Close form"
-            className="absolute top-4 right-4 cursor-pointer rounded-full border border-white/10 p-1.5 text-muted-foreground transition-colors hover:border-gold/50 hover:text-gold"
+            className="absolute top-3 right-3 z-10 cursor-pointer rounded-full border border-white/10 p-2 text-muted-foreground transition-colors hover:border-gold/50 hover:text-gold"
           >
-            <X className="size-4" />
+            <X className="size-5" />
           </button>
         )}
+
 
         <div className="relative p-6 sm:p-8">
           {stage === "success" ? (
