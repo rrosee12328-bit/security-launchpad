@@ -60,7 +60,7 @@ function SkoolMockup() {
           </div>
           <div className="flex-1 rounded-md border border-white/10 bg-white/5 px-3 py-1 text-center">
             <span className="font-mono text-[10px] tracking-wider text-muted-foreground">
-              skool.com/7-figure-security
+              skool.com/7-figure-security-5885
             </span>
           </div>
         </div>
@@ -95,13 +95,19 @@ function SkoolMockup() {
                 </div>
               </div>
               <p className="mt-2 text-[11px] leading-snug text-foreground/85">
-                New module live: How to Get Security Contracts — proposals, RFPs, and
-                outreach strategy.
+                New module live: How to Get Security Contracts — proposals, RFPs, and outreach
+                strategy.
               </p>
             </div>
             {[
-              { tag: "Wins", text: "Just submitted my first government RFP using the Module 6 framework." },
-              { tag: "Pricing", text: "Recalculated my labor burden — my old rate was losing money." },
+              {
+                tag: "Wins",
+                text: "Just submitted my first government RFP using the Module 6 framework.",
+              },
+              {
+                tag: "Pricing",
+                text: "Recalculated my labor burden — my old rate was losing money.",
+              },
             ].map((post) => (
               <div key={post.tag} className="rounded-lg border border-white/10 bg-white/[0.03] p-3">
                 <span className="rounded-full border border-gold/25 px-2 py-0.5 font-mono text-[8px] tracking-widest text-gold uppercase">
@@ -146,8 +152,8 @@ export function CommunitySection() {
               <span className="text-gold-gradient">You&rsquo;re Joining a Community.</span>
             </h2>
             <p className="mt-5 text-base leading-relaxed text-muted-foreground">
-              7 Figure Security is hosted inside Skool — bringing the training, resources,
-              and community together in one place so you&rsquo;re not trying to build alone.
+              7 Figure Security is hosted inside Skool — bringing the training, resources, and
+              community together in one place so you&rsquo;re not trying to build alone.
             </p>
           </Reveal>
 

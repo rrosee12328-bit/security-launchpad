@@ -12,7 +12,7 @@ export type BillingFrequency = "per month" | "one-time" | "per year";
 export const BILLING_FREQUENCY: BillingFrequency = "per month";
 
 /** Paid Skool enrollment page. Members complete checkout here. */
-export const SKOOL_URL = "https://www.skool.com/7-figure-security";
+export const SKOOL_URL = "https://www.skool.com/7-figure-security-5885/about";
 
 /** Public Supabase client configuration used to call the lead-capture Edge Function. */
 export const SUPABASE_URL = "https://rmbmgpzmqrteefwxmhls.supabase.co";
