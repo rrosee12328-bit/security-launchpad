@@ -170,10 +170,11 @@ function LeadModal({ open, onClose }: { open: boolean; onClose: () => void }) {
     setStage("success");
 
     trackEvent("Skool_Redirect", { destination });
-    window.setTimeout(() => {
+    redirectRef.current = window.setTimeout(() => {
       window.location.assign(destination);
     }, SKOOL_REDIRECT_DELAY_MS);
   }
+
 
   const inputClass = (hasError?: string) =>
     cn(
