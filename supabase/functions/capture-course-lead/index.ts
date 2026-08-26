@@ -1,3 +1,5 @@
+import "jsr:@supabase/functions-js/edge-runtime.d.ts";
+
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, apikey, content-type, x-client-info",
@@ -31,7 +33,7 @@ function clean(value: unknown, maxLength: number) {
   return typeof value === "string" ? value.trim().slice(0, maxLength) : "";
 }
 
-Deno.serve(async (request) => {
+async function handleRequest(request: Request) {
   if (request.method === "OPTIONS")
     return new Response(null, { status: 204, headers: corsHeaders });
   if (request.method !== "POST") return json(405, { success: false, code: "method_not_allowed" });
@@ -114,4 +116,6 @@ Deno.serve(async (request) => {
   }
 
   return json(200, { success: true });
-});
+}
+
+export default { fetch: handleRequest };
