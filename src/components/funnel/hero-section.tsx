@@ -2,7 +2,7 @@ import { BadgeCheck } from "lucide-react";
 import { BRAND_TAGLINE } from "@/lib/config";
 import { CTAButton } from "./cta-button";
 import { Reveal } from "./shared";
-import stephenHero from "@/assets/stephen-hero.png";
+import stephenHero from "@/assets/stephen-hero.png.asset.json";
 import skyline from "@/assets/skyline-night.jpg";
 
 export function HeroSection() {
@@ -80,7 +80,7 @@ export function HeroSection() {
             <div className="animate-scan pointer-events-none absolute right-6 left-6 z-10 h-px bg-gradient-to-r from-transparent via-gold/70 to-transparent" />
 
             <img
-              src={stephenHero}
+              src={stephenHero.url}
               alt="Stephen Taylor, founder of 7 Figure Security"
               fetchPriority="high"
               width={1024}

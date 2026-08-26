@@ -1,5 +1,5 @@
 import { Reveal, Eyebrow } from "./shared";
-import stephenAlt from "@/assets/stephen-alt.png";
+import stephenAlt from "@/assets/stephen-alt.png.asset.json";
 import buildingImg from "@/assets/commercial-building.jpg";
 
 const STATS = [
@@ -63,7 +63,7 @@ export function ExperienceSection() {
             <div className="hud-corners relative overflow-hidden rounded-xl border border-white/10 bg-gradient-to-b from-navy/50 to-navy-deep/80">
               <div className="absolute -top-16 left-1/2 h-40 w-64 -translate-x-1/2 rounded-full bg-gold/15 blur-3xl" />
               <img
-                src={stephenAlt}
+                src={stephenAlt.url}
                 alt="Stephen Taylor"
                 loading="lazy"
                 width={1024}
