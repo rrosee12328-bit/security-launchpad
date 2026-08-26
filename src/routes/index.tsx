@@ -10,7 +10,7 @@ import { TransformationSection } from "@/components/funnel/transformation-sectio
 import { LearningCards } from "@/components/funnel/learning-cards";
 import { RoadmapSection } from "@/components/funnel/roadmap-section";
 import { ExperienceSection } from "@/components/funnel/experience-section";
-import { WhyDifferentSection } from "@/components/funnel/why-different-section";
+
 import { WhoItsForSection } from "@/components/funnel/who-its-for-section";
 import { CommunitySection } from "@/components/funnel/community-section";
 import { CurriculumSection } from "@/components/funnel/curriculum-section";
@@ -70,7 +70,7 @@ function Index() {
           <LearningCards />
           <RoadmapSection />
           <ExperienceSection />
-          <WhyDifferentSection />
+          
           <WhoItsForSection />
           <CommunitySection />
           <CurriculumSection />
