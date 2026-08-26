@@ -96,16 +96,27 @@ function LeadModal({ open, onClose }: { open: boolean; onClose: () => void }) {
     const previous = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape" && stage !== "submitting") onClose();
+      if (e.key === "Escape" && stage !== "submitting") close();
     };
     window.addEventListener("keydown", onKey);
     return () => {
       document.body.style.overflow = previous;
       window.removeEventListener("keydown", onKey);
     };
-  }, [open, stage, onClose]);
+  }, [open, stage, close]);
+
+  // Safety net: cancel any pending Skool redirect if the modal unmounts
+  useEffect(() => {
+    return () => {
+      if (redirectRef.current) {
+        window.clearTimeout(redirectRef.current);
+        redirectRef.current = null;
+      }
+    };
+  }, []);
 
   if (!open) return null;
+
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
