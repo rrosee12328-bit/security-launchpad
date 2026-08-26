@@ -5,18 +5,18 @@ import buildingImg from "@/assets/commercial-building.jpg";
 const STATS = [
   {
     value: "$0 → 7 Figures",
-    label: "Built a security company from the ground up.",
+    label: "Built Kairos Security from the ground up to seven figures in about five years.",
   },
   {
-    value: "100+ Employees",
-    label: "Managed a security workforce of more than 100 employees at peak scale.",
+    value: "113 Employees",
+    label: "Grew the company to 113 employees at peak scale.",
   },
   {
-    value: "Major Contracts",
-    label: "Experience winning and servicing significant commercial and government opportunities.",
+    value: "Major Government Contracts",
+    label: "Won and serviced contracts with organizations including the City of Houston, TxDOT, and Metro.",
   },
   {
-    value: "Years of Real Lessons",
+    value: "Real Experience. Real Lessons.",
     label: "The strategies include both what worked and what should have been done differently.",
   },
 ];
@@ -44,18 +44,18 @@ export function ExperienceSection() {
           <Reveal>
             <Eyebrow>Real Experience</Eyebrow>
             <h2 className="mt-4 font-display text-3xl leading-[1.05] tracking-wide text-balance uppercase sm:text-4xl md:text-[2.75rem]">
-              Built From Real Experience —{" "}
-              <span className="text-gold-gradient">Not Theory</span>
+              Built by Someone Who{" "}
+              <span className="text-gold-gradient">Actually Did It</span>
             </h2>
             <p className="mt-5 text-base leading-relaxed text-muted-foreground">
-              7 Figure Security is built around lessons learned from actually starting,
-              operating, and scaling a security company.
+              Stephen Taylor built Kairos Security from $0 to seven figures in about
+              five years, growing the company to 113 employees and winning major
+              contracts with organizations including the City of Houston, TxDOT, and
+              Metro.
             </p>
             <p className="mt-4 text-base leading-relaxed text-muted-foreground">
-              This is not information collected from random articles or business theory.
-              It comes from real-world experience building a company, managing employees,
-              winning contracts, solving operational problems, making mistakes, and
-              learning what it actually takes to grow.
+              7 Figure Security gives you the strategies, systems, and lessons Stephen
+              learned building the company from the ground up.
             </p>
           </Reveal>
 
