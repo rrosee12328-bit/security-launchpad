@@ -1,0 +1,4 @@
+project_id = "rmbmgpzmqrteefwxmhls"
+
+[functions.capture-course-lead]
+verify_jwt = true

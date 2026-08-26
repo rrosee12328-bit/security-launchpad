@@ -14,14 +14,11 @@ export const BILLING_FREQUENCY: BillingFrequency = "per month";
 /** Paid Skool enrollment page. Members complete checkout here. */
 export const SKOOL_URL = "https://www.skool.com/7-figure-security";
 
-/**
- * External lead submission endpoint (webhook, n8n, CRM, your own backend, etc.).
- * Leave empty to skip the network call (useful while designing).
- * The browser POSTs JSON: firstName, email, phone, submittedAt,
- * landingPageUrl, referralUrl, utm_source, utm_medium, utm_campaign,
- * utm_content, utm_term.
- */
-export const LEAD_SUBMISSION_ENDPOINT = "";
+/** Public Supabase client configuration used to call the lead-capture Edge Function. */
+export const SUPABASE_URL = "https://rmbmgpzmqrteefwxmhls.supabase.co";
+export const SUPABASE_ANON_KEY =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJtYm1ncHptcXJ0ZWVmd3htaGxzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY4NDM2MTMsImV4cCI6MjEwMjQxOTYxM30.Pmo1otfsa52cHOI_r1nD8taee8FsPfqb1J0o1biZHGo";
+export const LEAD_SUBMISSION_ENDPOINT = `${SUPABASE_URL}/functions/v1/capture-course-lead`;
 
 export const SUPPORT_EMAIL = "support@7figuresecurity.com";
 

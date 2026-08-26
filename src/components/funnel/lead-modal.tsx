@@ -14,6 +14,7 @@ import {
   BRAND_NAME,
   LEAD_SUBMISSION_ENDPOINT,
   SKOOL_REDIRECT_DELAY_MS,
+  SUPABASE_ANON_KEY,
   buildSkoolUrl,
 } from "@/lib/config";
 import { getUtmParams, trackEvent } from "@/lib/tracking";
@@ -70,6 +71,7 @@ function LeadModal({ open, onClose }: { open: boolean; onClose: () => void }) {
   const [stage, setStage] = useState<Stage>("form");
   const [values, setValues] = useState({ firstName: "", email: "", phone: "" });
   const [errors, setErrors] = useState<ReturnType<typeof validate>>({});
+  const [submitError, setSubmitError] = useState("");
   const [skoolUrl, setSkoolUrl] = useState("");
   const panelRef = useRef<HTMLDivElement>(null);
 
@@ -102,6 +104,7 @@ function LeadModal({ open, onClose }: { open: boolean; onClose: () => void }) {
     if (Object.keys(nextErrors).length > 0) return;
 
     setStage("submitting");
+    setSubmitError("");
 
     const utm = getUtmParams();
     const payload = {
@@ -114,22 +117,26 @@ function LeadModal({ open, onClose }: { open: boolean; onClose: () => void }) {
       ...utm,
     };
 
-    // Send the lead to the configurable external endpoint BEFORE redirecting.
-    // Compatible with any webhook receiver (n8n, CRM, Supabase edge, etc.).
-    if (LEAD_SUBMISSION_ENDPOINT) {
-      try {
-        await fetch(LEAD_SUBMISSION_ENDPOINT, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
-        });
-      } catch (err) {
-        // Never strand the visitor — the lead flow continues even if the
-        // endpoint is unreachable.
-        console.warn("[7fs] lead endpoint unreachable", err);
-      }
-    } else {
-      await new Promise((r) => setTimeout(r, 700));
+    // The lead must be persisted before enrollment can continue.
+    try {
+      const response = await fetch(LEAD_SUBMISSION_ENDPOINT, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          apikey: SUPABASE_ANON_KEY,
+          Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) throw new Error(`Lead capture failed (${response.status})`);
+    } catch (err) {
+      console.warn("[7fs] lead capture failed", err);
+      setStage("form");
+      setSubmitError(
+        "We couldn't save your information. Please check your connection and try again.",
+      );
+      return;
     }
 
     trackEvent("Lead", {
@@ -223,8 +230,19 @@ function LeadModal({ open, onClose }: { open: boolean; onClose: () => void }) {
               </p>
 
               <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-4" noValidate>
+                {submitError && (
+                  <div
+                    role="alert"
+                    className="rounded-md border border-destructive/50 bg-destructive/10 px-4 py-3 text-sm text-destructive"
+                  >
+                    {submitError}
+                  </div>
+                )}
                 <div>
-                  <label htmlFor="lead-first-name" className="mb-1.5 block text-xs font-semibold tracking-wide text-foreground/80 uppercase">
+                  <label
+                    htmlFor="lead-first-name"
+                    className="mb-1.5 block text-xs font-semibold tracking-wide text-foreground/80 uppercase"
+                  >
                     First Name <span className="text-gold">*</span>
                   </label>
                   <input
@@ -242,7 +260,10 @@ function LeadModal({ open, onClose }: { open: boolean; onClose: () => void }) {
                 </div>
 
                 <div>
-                  <label htmlFor="lead-email" className="mb-1.5 block text-xs font-semibold tracking-wide text-foreground/80 uppercase">
+                  <label
+                    htmlFor="lead-email"
+                    className="mb-1.5 block text-xs font-semibold tracking-wide text-foreground/80 uppercase"
+                  >
                     Email Address <span className="text-gold">*</span>
                   </label>
                   <input
@@ -258,7 +279,10 @@ function LeadModal({ open, onClose }: { open: boolean; onClose: () => void }) {
                 </div>
 
                 <div>
-                  <label htmlFor="lead-phone" className="mb-1.5 block text-xs font-semibold tracking-wide text-foreground/80 uppercase">
+                  <label
+                    htmlFor="lead-phone"
+                    className="mb-1.5 block text-xs font-semibold tracking-wide text-foreground/80 uppercase"
+                  >
                     Phone Number <span className="text-gold">*</span>
                   </label>
                   <input
