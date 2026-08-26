@@ -29,11 +29,14 @@ export function Header() {
           <span className="flex size-9 items-center justify-center rounded-md bg-gold-gradient shadow-[0_0_20px_-4px_var(--gold)]">
             <Shield className="size-5 text-primary-foreground" strokeWidth={2.5} />
           </span>
-          <span className="font-display text-lg tracking-wider uppercase">
+          <span className="font-display text-base tracking-wider whitespace-nowrap uppercase sm:text-lg">
             7 Figure <span className="text-gold-gradient">Security</span>
           </span>
         </a>
-        <CTAButton trackingLabel="header" className="px-4 py-2.5 text-xs sm:px-6 sm:text-sm">
+        <CTAButton
+          trackingLabel="header"
+          className="px-3.5 py-2.5 text-[11px] whitespace-nowrap sm:px-6 sm:text-sm"
+        >
           Join {BRAND_NAME}
         </CTAButton>
       </div>
