@@ -191,10 +191,12 @@ function LeadModal({ open, onClose }: { open: boolean; onClose: () => void }) {
     >
       {/* Backdrop */}
       <button
+        type="button"
         aria-label="Close"
-        onClick={stage === "submitting" ? undefined : onClose}
+        onClick={stage === "submitting" ? undefined : close}
         className="absolute inset-0 cursor-pointer bg-navy-deep/85 backdrop-blur-sm"
       />
+
 
       {/* Panel */}
       <div
