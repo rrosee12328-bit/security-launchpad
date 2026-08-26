@@ -74,8 +74,18 @@ function LeadModal({ open, onClose }: { open: boolean; onClose: () => void }) {
   const [submitError, setSubmitError] = useState("");
   const [skoolUrl, setSkoolUrl] = useState("");
   const panelRef = useRef<HTMLDivElement>(null);
+  const redirectRef = useRef<number | null>(null);
+
+  const close = useCallback(() => {
+    if (redirectRef.current) {
+      window.clearTimeout(redirectRef.current);
+      redirectRef.current = null;
+    }
+    onClose();
+  }, [onClose]);
 
   // Reset back to the form whenever the modal is reopened
+
   useEffect(() => {
     if (open) setStage((s) => (s === "success" ? "success" : "form"));
   }, [open]);
