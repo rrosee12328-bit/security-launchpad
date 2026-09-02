@@ -1,22 +1,16 @@
-import { Check } from "lucide-react";
+import { Quote } from "lucide-react";
 import { CTAButton } from "./cta-button";
 import { Eyebrow, Reveal } from "./shared";
 import operationsImg from "@/assets/security-operations.jpg";
 
-const CHECKLIST = [
-  "Business structure and compliance",
-  "Licensing and insurance",
-  "Professional company infrastructure",
-  "Pricing your services correctly",
-  "Understanding security contracts",
-  "Finding and pursuing clients",
-  "Hiring and managing officers",
-  "Running day-to-day operations",
-  "Protecting the company from unnecessary risk",
-  "Creating systems that can support growth",
+const ASSUMPTIONS = [
+  "Once I get licensed, I can start getting contracts.",
+  "I'll figure out pricing once customers start calling.",
+  "If I hire good guards, the rest will work itself out.",
+  "I just need my first client and then I'll figure out the systems.",
 ];
 
-export function ProblemSection() {
+export function BeliefsSection() {
   return (
     <section className="section-pad relative overflow-hidden">
       <div className="bg-blueprint-fine absolute inset-0 opacity-50" />
@@ -37,48 +31,53 @@ export function ProblemSection() {
             <div className="absolute inset-0 bg-gradient-to-t from-navy-deep/80 via-transparent to-transparent" />
             <div className="absolute bottom-5 left-5 rounded-md border border-gold/30 bg-navy-deep/85 px-3 py-2 backdrop-blur-sm">
               <span className="font-mono text-[10px] tracking-[0.25em] text-gold uppercase">
-                Operations &bull; Contracts &bull; Systems
+                Foundation &bull; Pricing &bull; Contracts &bull; Systems
               </span>
             </div>
           </div>
         </Reveal>
 
-        {/* Copy + checklist */}
+        {/* Copy */}
         <div className="order-1 lg:order-2">
           <Reveal>
-            <Eyebrow>The Real Work</Eyebrow>
+            <Eyebrow>The Costly Assumptions</Eyebrow>
             <h2 className="mt-4 font-display text-3xl leading-[1.05] tracking-wide text-balance uppercase sm:text-4xl md:text-[2.75rem]">
-              Starting a Security Company Is More Than Getting an LLC and{" "}
+              Starting a Security Company Is Not Just Getting an LLC and{" "}
               <span className="text-gold-gradient">Hiring Guards</span>
             </h2>
             <p className="mt-5 text-base leading-relaxed text-muted-foreground">
-              Building a security company requires more than having the idea. You need
-              the right business foundation, pricing, contracts, systems, people,
-              processes, and strategy to operate professionally and grow.
+              A lot of people enter this business thinking:
             </p>
           </Reveal>
 
           <Reveal delay={120}>
-            <ul className="mt-8 grid grid-cols-1 gap-x-6 gap-y-3 sm:grid-cols-2">
-              {CHECKLIST.map((item) => (
-                <li key={item} className="flex items-start gap-2.5">
-                  <span className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full border border-gold/40 bg-gold/10">
-                    <Check className="size-3 text-gold" strokeWidth={3} />
+            <ul className="mt-6 flex flex-col gap-3">
+              {ASSUMPTIONS.map((line) => (
+                <li
+                  key={line}
+                  className="flex items-start gap-3 rounded-lg border border-white/10 bg-white/[0.03] px-4 py-3.5"
+                >
+                  <Quote className="mt-0.5 size-4 shrink-0 text-gold/70" />
+                  <span className="text-sm leading-snug text-foreground/85 italic">
+                    &ldquo;{line}&rdquo;
                   </span>
-                  <span className="text-sm leading-snug text-foreground/85">{item}</span>
                 </li>
               ))}
             </ul>
           </Reveal>
 
           <Reveal delay={200}>
-            <p className="mt-8 border-l-2 border-gold pl-4 text-sm leading-relaxed text-foreground/90 italic md:text-base">
-              7 Figure Security gives you a roadmap instead of forcing you to figure
-              everything out through trial and error.
+            <p className="mt-7 border-l-2 border-gold pl-4 text-sm leading-relaxed text-foreground/90 md:text-base">
+              Those assumptions can become expensive mistakes.
+            </p>
+            <p className="mt-5 text-base leading-relaxed text-muted-foreground">
+              In this free webinar, Stephen breaks down what actually needs to be in
+              place if you want to build a legitimate, contract-ready security company
+              instead of learning everything through trial and error.
             </p>
             <div className="mt-8">
-              <CTAButton trackingLabel="problem" size="lg" showArrow>
-                Start Building Your Company
+              <CTAButton trackingLabel="beliefs" size="lg" showArrow>
+                Watch the Free Webinar
               </CTAButton>
             </div>
           </Reveal>

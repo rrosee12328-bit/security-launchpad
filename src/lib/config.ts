@@ -1,17 +1,29 @@
 /**
  * 7 Figure Security — centralized funnel configuration.
  * Edit values here; every component reads from this file.
+ *
+ * Funnel: Ad → Webinar Registration Page → Webinar → 7 Figure Security Offer
  */
 
 export const BRAND_NAME = "7 Figure Security";
-export const BRAND_TAGLINE = "Training. Resources. Community. Real-world strategy.";
+export const BRAND_TAGLINE = "Live training. Real experience. No fluff.";
 
-/** Membership pricing — change the price in ONE place. */
-export const MEMBERSHIP_PRICE = "$97";
-export type BillingFrequency = "per month" | "one-time" | "per year";
-export const BILLING_FREQUENCY: BillingFrequency = "per month";
+/** Webinar event details. */
+export const WEBINAR_BADGE = "Free Webinar";
+export const WEBINAR_TITLE =
+  "The 5 Biggest Mistakes People Make When Starting a Security Company";
+export const WEBINAR_CTA = "Reserve My Spot";
+export const WEBINAR_HOST = "Stephen Taylor";
 
-/** Paid Skool enrollment page. Members complete checkout here. */
+/**
+ * Optional destination after a successful registration (thank-you page,
+ * webinar room, or replay). Leave empty to show the on-page confirmation.
+ */
+export const WEBINAR_CONFIRMATION_URL = "";
+/** Delay before auto-redirecting a registrant when a URL is configured. */
+export const WEBINAR_REDIRECT_DELAY_MS = 1600;
+
+/** Paid Skool enrollment page — presented AFTER the webinar, not on this page. */
 export const SKOOL_URL = "https://www.skool.com/7-figure-security-5885/about";
 
 /** Public Supabase client configuration used to call the lead-capture Edge Function. */
@@ -28,9 +40,6 @@ export const SOCIAL_URLS = {
   linkedin: "#",
 } as const;
 
-/** Delay before auto-redirecting a new lead to Skool. */
-export const SKOOL_REDIRECT_DELAY_MS = 1600;
-
 export interface UtmParams {
   utm_source: string;
   utm_medium: string;
@@ -39,15 +48,15 @@ export interface UtmParams {
   utm_term: string;
 }
 
-/** Append UTM parameters to the Skool URL so attribution survives the redirect. */
-export function buildSkoolUrl(utm: UtmParams): string {
+/** Append UTM parameters to a destination URL so attribution survives the redirect. */
+export function buildUrlWithUtm(base: string, utm: UtmParams): string {
   try {
-    const url = new URL(SKOOL_URL);
+    const url = new URL(base);
     for (const [key, value] of Object.entries(utm)) {
       if (value) url.searchParams.set(key, value);
     }
     return url.toString();
   } catch {
-    return SKOOL_URL;
+    return base;
   }
 }

@@ -2,10 +2,10 @@ import { Briefcase, FileCheck, ShieldCheck, TrendingUp } from "lucide-react";
 import { Reveal } from "./shared";
 
 const ITEMS = [
-  { icon: ShieldCheck, label: "Real Experience" },
+  { icon: ShieldCheck, label: "Free to Attend" },
   { icon: FileCheck, label: "Real Contracts" },
   { icon: Briefcase, label: "Real Systems" },
-  { icon: TrendingUp, label: "Real Growth" },
+  { icon: TrendingUp, label: "One Sitting" },
 ];
 
 export function AuthorityBar() {

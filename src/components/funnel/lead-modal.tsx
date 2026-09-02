@@ -8,14 +8,16 @@ import {
   type FormEvent,
   type ReactNode,
 } from "react";
-import { ArrowRight, Lock, ShieldCheck, X } from "lucide-react";
+import { ArrowRight, CalendarCheck, Lock, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
-  BRAND_NAME,
   LEAD_SUBMISSION_ENDPOINT,
-  SKOOL_REDIRECT_DELAY_MS,
   SUPABASE_ANON_KEY,
-  buildSkoolUrl,
+  WEBINAR_CONFIRMATION_URL,
+  WEBINAR_HOST,
+  WEBINAR_REDIRECT_DELAY_MS,
+  WEBINAR_TITLE,
+  buildUrlWithUtm,
 } from "@/lib/config";
 import { getUtmParams, trackEvent } from "@/lib/tracking";
 
@@ -72,13 +74,25 @@ function LeadModal({ open, onClose }: { open: boolean; onClose: () => void }) {
   const [values, setValues] = useState({ firstName: "", email: "", phone: "" });
   const [errors, setErrors] = useState<ReturnType<typeof validate>>({});
   const [submitError, setSubmitError] = useState("");
-  const [skoolUrl, setSkoolUrl] = useState("");
+  const [nextUrl, setNextUrl] = useState("");
   const panelRef = useRef<HTMLDivElement>(null);
+  const redirectRef = useRef<number | null>(null);
 
-  // Reset back to the form whenever the modal is reopened
-  useEffect(() => {
-    if (open) setStage((s) => (s === "success" ? "success" : "form"));
-  }, [open]);
+  /** Single close path: always cancels any pending redirect. */
+  const close = useCallback(() => {
+    if (redirectRef.current !== null) {
+      window.clearTimeout(redirectRef.current);
+      redirectRef.current = null;
+    }
+    onClose();
+  }, [onClose]);
+
+  useEffect(
+    () => () => {
+      if (redirectRef.current !== null) window.clearTimeout(redirectRef.current);
+    },
+    [],
+  );
 
   // Scroll lock + Escape to close
   useEffect(() => {
@@ -86,14 +100,14 @@ function LeadModal({ open, onClose }: { open: boolean; onClose: () => void }) {
     const previous = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape" && stage !== "submitting") onClose();
+      if (e.key === "Escape" && stage !== "submitting") close();
     };
     window.addEventListener("keydown", onKey);
     return () => {
       document.body.style.overflow = previous;
       window.removeEventListener("keydown", onKey);
     };
-  }, [open, stage, onClose]);
+  }, [open, stage, close]);
 
   if (!open) return null;
 
@@ -111,13 +125,13 @@ function LeadModal({ open, onClose }: { open: boolean; onClose: () => void }) {
       firstName: values.firstName.trim(),
       email: values.email.trim(),
       phone: values.phone.trim(),
+      registrationFor: WEBINAR_TITLE,
       submittedAt: new Date().toISOString(),
       landingPageUrl: window.location.href,
       referralUrl: document.referrer || "",
       ...utm,
     };
 
-    // The lead must be persisted before enrollment can continue.
     try {
       const response = await fetch(LEAD_SUBMISSION_ENDPOINT, {
         method: "POST",
@@ -129,29 +143,26 @@ function LeadModal({ open, onClose }: { open: boolean; onClose: () => void }) {
         body: JSON.stringify(payload),
       });
 
-      if (!response.ok) throw new Error(`Lead capture failed (${response.status})`);
+      if (!response.ok) throw new Error(`Registration failed (${response.status})`);
     } catch (err) {
-      console.warn("[7fs] lead capture failed", err);
+      console.warn("[7fs] registration failed", err);
       setStage("form");
       setSubmitError(
-        "We couldn't save your information. Please check your connection and try again.",
+        "We couldn't save your registration. Please check your connection and try again.",
       );
       return;
     }
 
-    trackEvent("Lead", {
-      email: payload.email,
-      phone: payload.phone,
-    });
-
-    const destination = buildSkoolUrl(utm);
-    setSkoolUrl(destination);
+    trackEvent("Lead", { email: payload.email, phone: payload.phone });
     setStage("success");
 
-    trackEvent("Skool_Redirect", { destination });
-    window.setTimeout(() => {
-      window.location.assign(destination);
-    }, SKOOL_REDIRECT_DELAY_MS);
+    if (WEBINAR_CONFIRMATION_URL) {
+      const destination = buildUrlWithUtm(WEBINAR_CONFIRMATION_URL, utm);
+      setNextUrl(destination);
+      redirectRef.current = window.setTimeout(() => {
+        window.location.assign(destination);
+      }, WEBINAR_REDIRECT_DELAY_MS);
+    }
   }
 
   const inputClass = (hasError?: string) =>
@@ -164,13 +175,14 @@ function LeadModal({ open, onClose }: { open: boolean; onClose: () => void }) {
     <div
       role="dialog"
       aria-modal="true"
-      aria-label="Join 7 Figure Security"
+      aria-label="Reserve your webinar spot"
       className="fixed inset-0 z-[100] flex items-end justify-center p-4 sm:items-center"
     >
       {/* Backdrop */}
       <button
+        type="button"
         aria-label="Close"
-        onClick={stage === "submitting" ? undefined : onClose}
+        onClick={stage === "submitting" ? undefined : close}
         className="absolute inset-0 cursor-pointer bg-navy-deep/85 backdrop-blur-sm"
       />
 
@@ -179,16 +191,15 @@ function LeadModal({ open, onClose }: { open: boolean; onClose: () => void }) {
         ref={panelRef}
         className="card-cinematic relative w-full max-w-md overflow-hidden rounded-xl"
       >
-        {/* gold top edge */}
         <div className="h-[3px] w-full bg-gold-gradient" />
         <div className="pointer-events-none absolute -top-24 left-1/2 h-48 w-72 -translate-x-1/2 rounded-full bg-gold/20 blur-3xl" />
 
         {stage !== "submitting" && (
           <button
             type="button"
-            onClick={onClose}
+            onClick={close}
             aria-label="Close form"
-            className="absolute top-4 right-4 z-20 cursor-pointer rounded-full border border-white/10 p-1.5 text-muted-foreground transition-colors hover:border-gold/50 hover:text-gold"
+            className="absolute top-4 right-4 z-20 cursor-pointer rounded-full border border-white/10 p-2 text-muted-foreground transition-colors hover:border-gold/50 hover:text-gold"
           >
             <X className="size-4" />
           </button>
@@ -198,36 +209,34 @@ function LeadModal({ open, onClose }: { open: boolean; onClose: () => void }) {
           {stage === "success" ? (
             <div className="flex flex-col items-center py-6 text-center">
               <div className="mb-6 flex size-16 items-center justify-center rounded-full border border-gold/40 bg-gold/10">
-                <ShieldCheck className="size-8 text-gold" />
+                <CalendarCheck className="size-8 text-gold" />
               </div>
               <h3 className="font-display text-3xl tracking-wide uppercase">
-                You&rsquo;re Almost There.
+                Your Spot Is Reserved.
               </h3>
               <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                Taking you to {BRAND_NAME} to complete your enrollment...
+                Check your email for your webinar access details. Watch for a message
+                from {WEBINAR_HOST}.
               </p>
-              <div className="mt-6 flex items-center gap-3">
-                <span className="size-5 animate-spin rounded-full border-2 border-gold/30 border-t-gold" />
-                <span className="font-mono text-[11px] tracking-[0.25em] text-gold uppercase">
-                  Redirecting
-                </span>
-              </div>
-              {skoolUrl && (
+              {nextUrl && (
                 <a
-                  href={skoolUrl}
+                  href={nextUrl}
                   className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-gold underline-offset-4 hover:underline"
                 >
-                  Continue to Enrollment <ArrowRight className="size-4" />
+                  Continue <ArrowRight className="size-4" />
                 </a>
               )}
             </div>
           ) : (
             <>
-              <h3 className="font-display text-2xl leading-tight tracking-wide uppercase sm:text-3xl">
-                Ready to Build Your Security Company?
+              <span className="font-mono text-[11px] font-semibold tracking-[0.3em] text-gold uppercase">
+                Free Webinar
+              </span>
+              <h3 className="mt-3 font-display text-2xl leading-tight tracking-wide uppercase sm:text-3xl">
+                Reserve Your Spot
               </h3>
               <p className="mt-2 text-sm text-muted-foreground">
-                Enter your information below to continue to {BRAND_NAME}.
+                The 5 Biggest Mistakes People Make When Starting a Security Company.
               </p>
 
               <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-4" noValidate>
@@ -306,7 +315,7 @@ function LeadModal({ open, onClose }: { open: boolean; onClose: () => void }) {
                   {stage === "submitting" ? (
                     <>
                       <span className="size-5 animate-spin rounded-full border-2 border-primary-foreground/40 border-t-primary-foreground" />
-                      Submitting...
+                      Reserving...
                     </>
                   ) : (
                     <>
@@ -314,7 +323,7 @@ function LeadModal({ open, onClose }: { open: boolean; onClose: () => void }) {
                         aria-hidden
                         className="animate-shimmer pointer-events-none absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-transparent via-white/45 to-transparent"
                       />
-                      <span className="relative">Continue to {BRAND_NAME}</span>
+                      <span className="relative">Reserve My Spot</span>
                       <ArrowRight className="relative size-4 transition-transform duration-300 group-hover:translate-x-1" />
                     </>
                   )}
@@ -323,9 +332,6 @@ function LeadModal({ open, onClose }: { open: boolean; onClose: () => void }) {
                 <p className="flex items-center justify-center gap-1.5 text-xs text-muted-foreground">
                   <Lock className="size-3 text-gold" />
                   Your information is kept private.
-                </p>
-                <p className="text-center text-xs text-muted-foreground/70">
-                  You&rsquo;ll continue to Skool to complete your paid enrollment.
                 </p>
               </form>
             </>

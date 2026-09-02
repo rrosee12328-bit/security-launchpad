@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
-import { BRAND_NAME } from "@/lib/config";
+import { BRAND_NAME, WEBINAR_CTA } from "@/lib/config";
 import logoAsset from "@/assets/7fs-logo.png.asset.json";
 import { CTAButton } from "./cta-button";
 
@@ -39,7 +39,7 @@ export function Header() {
           trackingLabel="header"
           className="px-3.5 py-2.5 text-[11px] whitespace-nowrap sm:px-6 sm:text-sm"
         >
-          Join {BRAND_NAME}
+          {WEBINAR_CTA}
         </CTAButton>
       </div>
     </header>
