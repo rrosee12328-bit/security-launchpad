@@ -72,7 +72,7 @@ type Stage = "form" | "submitting" | "success";
 
 function LeadModal({ open, onClose }: { open: boolean; onClose: () => void }) {
   const [stage, setStage] = useState<Stage>("form");
-  const [values, setValues] = useState({ firstName: "", email: "", phone: "" });
+  const [values, setValues] = useState({ firstName: "", lastName: "", email: "", phone: "" });
   const [errors, setErrors] = useState<ReturnType<typeof validate>>({});
   const [submitError, setSubmitError] = useState("");
   const [nextUrl, setNextUrl] = useState("");
