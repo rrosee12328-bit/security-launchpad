@@ -63,11 +63,21 @@ export function HeroSection() {
 
         {/* Portrait composition */}
         <Reveal delay={200} className="relative mx-auto w-full max-w-md lg:max-w-none">
-          <div className="relative">
+          <div className="relative mb-8 pb-10 sm:mb-10 sm:pb-12">
             {/* HUD frame behind portrait */}
             <div className="hud-corners absolute -inset-3 rounded-2xl border border-white/5 bg-gradient-to-b from-navy/60 to-navy-deep/80" />
             {/* scan line */}
             <div className="animate-scan pointer-events-none absolute right-6 left-6 z-10 h-px bg-gradient-to-r from-transparent via-gold/70 to-transparent" />
+
+            {/* event badge */}
+            <div className="absolute top-4 right-3 z-20 sm:top-6 sm:right-5">
+              <div className="gold-glow flex items-center gap-2 rounded-lg border border-gold/40 bg-navy-deep/90 px-3 py-2.5 backdrop-blur-md sm:px-4 sm:py-3">
+                <CalendarClock className="size-4 shrink-0 text-gold sm:size-5" />
+                <span className="text-[10px] leading-snug font-semibold tracking-wide uppercase sm:text-xs">
+                  One Sitting &bull; Free Webinar
+                </span>
+              </div>
+            </div>
 
             <img
               src={stephenHero.url}
@@ -78,26 +88,18 @@ export function HeroSection() {
               className="relative z-[5] mx-auto w-full max-w-sm object-contain drop-shadow-[0_30px_60px_oklch(0_0_0/60%)] lg:max-w-md [mask-image:linear-gradient(to_bottom,black_88%,transparent_99%)]"
             />
 
-            {/* event badge */}
-            <div className="animate-floaty absolute bottom-10 left-1/2 z-20 w-max max-w-[92%] -translate-x-1/2">
-              <div className="gold-glow flex items-center gap-2.5 rounded-lg border border-gold/40 bg-navy-deep/90 px-4 py-3 backdrop-blur-sm">
-                <CalendarClock className="size-5 shrink-0 text-gold" />
-                <span className="text-xs leading-snug font-semibold tracking-wide uppercase sm:text-sm">
-                  One Sitting &bull; Free Webinar
-                </span>
+            {/* integrated host lower-third */}
+            <div className="absolute right-4 bottom-0 left-4 z-20 sm:right-8 sm:left-8">
+              <div className="gold-glow border border-gold/35 bg-navy-deep/95 px-5 py-4 text-center backdrop-blur-md sm:px-7 sm:py-5">
+                <div className="mx-auto mb-2 h-px w-12 bg-gold/60" />
+                <p className="text-sm font-semibold tracking-wide uppercase text-gold sm:text-base">
+                  Stephen Taylor
+                </p>
+                <p className="mx-auto mt-1 max-w-sm text-sm leading-snug text-foreground/85 sm:text-base">
+                  Built a security company from $0 to seven figures and 113 employees.
+                </p>
               </div>
             </div>
-          </div>
-
-          {/* host caption */}
-          <div className="mt-5 text-center">
-            <p className="text-sm font-semibold tracking-wide uppercase text-gold sm:text-base">
-              Stephen Taylor
-            </p>
-            <p className="mt-1 max-w-xs text-sm leading-snug text-foreground/80 sm:text-base">
-              Built a security company from{" "}
-              <span className="text-foreground">$0 to seven figures and 113 employees</span>.
-            </p>
           </div>
         </Reveal>
       </div>
