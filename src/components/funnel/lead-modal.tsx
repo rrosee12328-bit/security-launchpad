@@ -250,25 +250,48 @@ function LeadModal({ open, onClose }: { open: boolean; onClose: () => void }) {
                     {submitError}
                   </div>
                 )}
-                <div>
-                  <label
-                    htmlFor="lead-first-name"
-                    className="mb-1.5 block text-xs font-semibold tracking-wide text-foreground/80 uppercase"
-                  >
-                    First Name <span className="text-gold">*</span>
-                  </label>
-                  <input
-                    id="lead-first-name"
-                    type="text"
-                    autoComplete="given-name"
-                    placeholder="Your first name"
-                    value={values.firstName}
-                    onChange={(e) => setValues({ ...values, firstName: e.target.value })}
-                    className={inputClass(errors.firstName)}
-                  />
-                  {errors.firstName && (
-                    <p className="mt-1 text-xs text-destructive">{errors.firstName}</p>
-                  )}
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                  <div>
+                    <label
+                      htmlFor="lead-first-name"
+                      className="mb-1.5 block text-xs font-semibold tracking-wide text-foreground/80 uppercase"
+                    >
+                      First Name <span className="text-gold">*</span>
+                    </label>
+                    <input
+                      id="lead-first-name"
+                      type="text"
+                      autoComplete="given-name"
+                      placeholder="First name"
+                      value={values.firstName}
+                      onChange={(e) => setValues({ ...values, firstName: e.target.value })}
+                      className={inputClass(errors.firstName)}
+                    />
+                    {errors.firstName && (
+                      <p className="mt-1 text-xs text-destructive">{errors.firstName}</p>
+                    )}
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="lead-last-name"
+                      className="mb-1.5 block text-xs font-semibold tracking-wide text-foreground/80 uppercase"
+                    >
+                      Last Name <span className="text-gold">*</span>
+                    </label>
+                    <input
+                      id="lead-last-name"
+                      type="text"
+                      autoComplete="family-name"
+                      placeholder="Last name"
+                      value={values.lastName}
+                      onChange={(e) => setValues({ ...values, lastName: e.target.value })}
+                      className={inputClass(errors.lastName)}
+                    />
+                    {errors.lastName && (
+                      <p className="mt-1 text-xs text-destructive">{errors.lastName}</p>
+                    )}
+                  </div>
                 </div>
 
                 <div>
