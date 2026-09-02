@@ -215,7 +215,7 @@ function LeadModal({ open, onClose }: { open: boolean; onClose: () => void }) {
               </h3>
               <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
                 Check your email for your webinar access details. Watch for a message
-                from {WEBINAR_HOST_LABEL}.
+                from {WEBINAR_HOST}.
               </p>
               {nextUrl && (
                 <a
