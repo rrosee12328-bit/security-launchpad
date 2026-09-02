@@ -7,7 +7,7 @@ const STATS = [
   { value: "113 Employees", label: "At peak scale" },
   {
     value: "Major Government Contracts",
-    label: "City of Houston, TxDOT, Metro",
+    label: "City of Houston, TxDOT",
   },
 ];
 
