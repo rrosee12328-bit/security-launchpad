@@ -54,9 +54,10 @@ export function LeadModalProvider({ children }: { children: ReactNode }) {
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-function validate(values: { firstName: string; email: string; phone: string }) {
-  const errors: Partial<Record<"firstName" | "email" | "phone", string>> = {};
+function validate(values: { firstName: string; lastName: string; email: string; phone: string }) {
+  const errors: Partial<Record<"firstName" | "lastName" | "email" | "phone", string>> = {};
   if (values.firstName.trim().length < 2) errors.firstName = "Enter your first name.";
+  if (values.lastName.trim().length < 2) errors.lastName = "Enter your last name.";
   if (!EMAIL_RE.test(values.email.trim())) errors.email = "Enter a valid email address.";
   const digits = values.phone.replace(/\D/g, "");
   if (digits.length < 10) errors.phone = "Enter a valid phone number.";
@@ -71,7 +72,7 @@ type Stage = "form" | "submitting" | "success";
 
 function LeadModal({ open, onClose }: { open: boolean; onClose: () => void }) {
   const [stage, setStage] = useState<Stage>("form");
-  const [values, setValues] = useState({ firstName: "", email: "", phone: "" });
+  const [values, setValues] = useState({ firstName: "", lastName: "", email: "", phone: "" });
   const [errors, setErrors] = useState<ReturnType<typeof validate>>({});
   const [submitError, setSubmitError] = useState("");
   const [nextUrl, setNextUrl] = useState("");
@@ -123,6 +124,7 @@ function LeadModal({ open, onClose }: { open: boolean; onClose: () => void }) {
     const utm = getUtmParams();
     const payload = {
       firstName: values.firstName.trim(),
+      lastName: values.lastName.trim(),
       email: values.email.trim(),
       phone: values.phone.trim(),
       registrationFor: WEBINAR_TITLE,
@@ -248,25 +250,48 @@ function LeadModal({ open, onClose }: { open: boolean; onClose: () => void }) {
                     {submitError}
                   </div>
                 )}
-                <div>
-                  <label
-                    htmlFor="lead-first-name"
-                    className="mb-1.5 block text-xs font-semibold tracking-wide text-foreground/80 uppercase"
-                  >
-                    First Name <span className="text-gold">*</span>
-                  </label>
-                  <input
-                    id="lead-first-name"
-                    type="text"
-                    autoComplete="given-name"
-                    placeholder="Your first name"
-                    value={values.firstName}
-                    onChange={(e) => setValues({ ...values, firstName: e.target.value })}
-                    className={inputClass(errors.firstName)}
-                  />
-                  {errors.firstName && (
-                    <p className="mt-1 text-xs text-destructive">{errors.firstName}</p>
-                  )}
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                  <div>
+                    <label
+                      htmlFor="lead-first-name"
+                      className="mb-1.5 block text-xs font-semibold tracking-wide text-foreground/80 uppercase"
+                    >
+                      First Name <span className="text-gold">*</span>
+                    </label>
+                    <input
+                      id="lead-first-name"
+                      type="text"
+                      autoComplete="given-name"
+                      placeholder="First name"
+                      value={values.firstName}
+                      onChange={(e) => setValues({ ...values, firstName: e.target.value })}
+                      className={inputClass(errors.firstName)}
+                    />
+                    {errors.firstName && (
+                      <p className="mt-1 text-xs text-destructive">{errors.firstName}</p>
+                    )}
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="lead-last-name"
+                      className="mb-1.5 block text-xs font-semibold tracking-wide text-foreground/80 uppercase"
+                    >
+                      Last Name <span className="text-gold">*</span>
+                    </label>
+                    <input
+                      id="lead-last-name"
+                      type="text"
+                      autoComplete="family-name"
+                      placeholder="Last name"
+                      value={values.lastName}
+                      onChange={(e) => setValues({ ...values, lastName: e.target.value })}
+                      className={inputClass(errors.lastName)}
+                    />
+                    {errors.lastName && (
+                      <p className="mt-1 text-xs text-destructive">{errors.lastName}</p>
+                    )}
+                  </div>
                 </div>
 
                 <div>
