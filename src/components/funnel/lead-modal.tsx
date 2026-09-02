@@ -54,9 +54,10 @@ export function LeadModalProvider({ children }: { children: ReactNode }) {
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-function validate(values: { firstName: string; email: string; phone: string }) {
-  const errors: Partial<Record<"firstName" | "email" | "phone", string>> = {};
+function validate(values: { firstName: string; lastName: string; email: string; phone: string }) {
+  const errors: Partial<Record<"firstName" | "lastName" | "email" | "phone", string>> = {};
   if (values.firstName.trim().length < 2) errors.firstName = "Enter your first name.";
+  if (values.lastName.trim().length < 2) errors.lastName = "Enter your last name.";
   if (!EMAIL_RE.test(values.email.trim())) errors.email = "Enter a valid email address.";
   const digits = values.phone.replace(/\D/g, "");
   if (digits.length < 10) errors.phone = "Enter a valid phone number.";
