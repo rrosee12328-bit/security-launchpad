@@ -3,21 +3,11 @@ import stephenAlt from "@/assets/stephen-alt.png.asset.json";
 import buildingImg from "@/assets/commercial-building.jpg";
 
 const STATS = [
-  {
-    value: "$0 → 7 Figures",
-    label: "Built Kairos Security from the ground up to seven figures in about five years.",
-  },
-  {
-    value: "113 Employees",
-    label: "Grew the company to 113 employees at peak scale.",
-  },
+  { value: "$0 → 7 Figures", label: "Built in about five years" },
+  { value: "113 Employees", label: "At peak scale" },
   {
     value: "Major Government Contracts",
-    label: "Won and serviced contracts with organizations including the City of Houston, TxDOT, and Metro.",
-  },
-  {
-    value: "Real Experience. Real Lessons.",
-    label: "The strategies include both what worked and what should have been done differently.",
+    label: "City of Houston, TxDOT, Metro",
   },
 ];
 
@@ -38,64 +28,60 @@ export function ExperienceSection() {
         <div className="absolute inset-0 bg-gradient-to-b from-background via-background/70 to-background" />
       </div>
 
-      <div className="relative mx-auto grid max-w-7xl grid-cols-1 items-center gap-12 px-4 sm:px-6 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16">
-        {/* Portrait + headline */}
-        <div>
+      <div className="relative mx-auto grid max-w-7xl grid-cols-1 items-center gap-12 px-4 sm:px-6 lg:grid-cols-[0.85fr_1.15fr] lg:gap-16">
+        {/* Portrait */}
+        <Reveal className="order-2 lg:order-1">
+          <div className="hud-corners relative overflow-hidden rounded-xl border border-white/10 bg-gradient-to-b from-navy/50 to-navy-deep/80">
+            <div className="absolute -top-16 left-1/2 h-40 w-64 -translate-x-1/2 rounded-full bg-gold/15 blur-3xl" />
+            <img
+              src={stephenAlt.url}
+              alt="Stephen Taylor"
+              loading="lazy"
+              width={1024}
+              height={1536}
+              className="relative mx-auto max-h-[24rem] object-contain [mask-image:linear-gradient(to_bottom,black_85%,transparent_99%)]"
+            />
+          </div>
+        </Reveal>
+
+        {/* Copy + stats */}
+        <div className="order-1 lg:order-2">
           <Reveal>
-            <Eyebrow>Real Experience</Eyebrow>
+            <Eyebrow>Your Host</Eyebrow>
             <h2 className="mt-4 font-display text-3xl leading-[1.05] tracking-wide text-balance uppercase sm:text-4xl md:text-[2.75rem]">
-              Built by Someone Who{" "}
-              <span className="text-gold-gradient">Actually Did It</span>
+              Learn From Someone Who{" "}
+              <span className="text-gold-gradient">Actually Built It</span>
             </h2>
             <p className="mt-5 text-base leading-relaxed text-muted-foreground">
-              Stephen Taylor built Kairos Security from $0 to seven figures in about
-              five years, growing the company to 113 employees and winning major
-              contracts with organizations including the City of Houston, TxDOT, and
-              Metro.
-            </p>
-            <p className="mt-4 text-base leading-relaxed text-muted-foreground">
-              7 Figure Security gives you the strategies, systems, and lessons Stephen
-              learned building the company from the ground up.
+              Stephen Taylor built Kairos Security from $0 to seven figures in
+              approximately five years, grew the company to 113 employees, and won major
+              contracts including the City of Houston, TxDOT, and Metro.
             </p>
           </Reveal>
 
-          <Reveal delay={150} className="relative mt-8 hidden lg:block">
-            <div className="hud-corners relative overflow-hidden rounded-xl border border-white/10 bg-gradient-to-b from-navy/50 to-navy-deep/80">
-              <div className="absolute -top-16 left-1/2 h-40 w-64 -translate-x-1/2 rounded-full bg-gold/15 blur-3xl" />
-              <img
-                src={stephenAlt.url}
-                alt="Stephen Taylor"
-                loading="lazy"
-                width={1024}
-                height={1536}
-                className="relative mx-auto max-h-[26rem] object-contain [mask-image:linear-gradient(to_bottom,black_85%,transparent_99%)]"
-              />
-            </div>
-          </Reveal>
-        </div>
-
-        {/* Stat cards */}
-        <div>
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+          <div className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-3">
             {STATS.map((stat, i) => (
               <Reveal key={stat.value} delay={i * 90}>
-                <div className="group card-cinematic relative h-full overflow-hidden rounded-xl p-7 transition-all duration-300 hover:-translate-y-1 hover:border-gold/40">
-                  <div className="absolute -top-10 -right-10 h-28 w-28 rounded-full bg-gold/10 blur-2xl transition-opacity duration-300 group-hover:opacity-100" />
-                  <span className="text-gold-gradient block font-display text-3xl leading-none tracking-wide uppercase sm:text-[2rem]">
+                <div className="card-cinematic h-full rounded-xl p-6 text-center">
+                  <span className="text-gold-gradient block font-display text-2xl leading-tight tracking-wide uppercase">
                     {stat.value}
                   </span>
-                  <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
+                  <p className="mt-3 text-xs leading-relaxed text-muted-foreground">
                     {stat.label}
                   </p>
-                  <div className="absolute inset-x-0 bottom-0 h-[2px] origin-left scale-x-0 bg-gold-gradient transition-transform duration-500 group-hover:scale-x-100" />
                 </div>
               </Reveal>
             ))}
           </div>
-          <Reveal delay={320}>
-            <p className="mt-6 text-xs leading-relaxed text-muted-foreground/80">
+
+          <Reveal delay={280}>
+            <p className="mt-8 border-l-2 border-gold pl-4 text-base leading-relaxed text-foreground/90">
+              In this webinar, Stephen shares the mistakes he sees aspiring owners
+              make&mdash;and the lessons he wishes more people understood before starting.
+            </p>
+            <p className="mt-5 text-xs leading-relaxed text-muted-foreground/80">
               Past business results are examples of experience and are not guarantees of
-              member results.
+              future results.
             </p>
           </Reveal>
         </div>
