@@ -57,13 +57,6 @@ export function HeroSection() {
               <CTAButton trackingLabel="hero" size="lg" showArrow>
                 {WEBINAR_CTA}
               </CTAButton>
-              <p className="flex max-w-lg items-start gap-2.5 text-base leading-relaxed text-foreground/90 md:text-lg">
-                <CalendarClock className="mt-1 size-5 shrink-0 text-gold" />
-                <span>
-                  Taught by Stephen Taylor &mdash; who built a security company from{" "}
-                  $0 to seven figures and 113 employees.
-                </span>
-              </p>
             </div>
           </Reveal>
         </div>
