@@ -124,6 +124,7 @@ function LeadModal({ open, onClose }: { open: boolean; onClose: () => void }) {
     const utm = getUtmParams();
     const payload = {
       firstName: values.firstName.trim(),
+      lastName: values.lastName.trim(),
       email: values.email.trim(),
       phone: values.phone.trim(),
       registrationFor: WEBINAR_TITLE,
