@@ -1,4 +1,4 @@
-import { BRAND_NAME } from "@/lib/config";
+import { WEBINAR_CTA } from "@/lib/config";
 import { trackEvent } from "@/lib/tracking";
 import { useLeadModal } from "./lead-modal";
 
@@ -22,7 +22,7 @@ export function MobileStickyCTA() {
             aria-hidden
             className="animate-shimmer pointer-events-none absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-transparent via-white/45 to-transparent"
           />
-          <span className="relative">Join {BRAND_NAME}</span>
+          <span className="relative">{WEBINAR_CTA}</span>
         </button>
       </div>
     </div>
