@@ -62,11 +62,11 @@ export function ExperienceSection() {
           <div className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-3">
             {STATS.map((stat, i) => (
               <Reveal key={stat.value} delay={i * 90}>
-                <div className="card-cinematic h-full rounded-xl p-7 text-center">
-                  <span className="text-gold-gradient block font-display text-3xl leading-tight tracking-wide uppercase sm:text-4xl">
+                <div className="card-cinematic flex h-full flex-col justify-center rounded-xl p-8 text-center">
+                  <span className="text-gold-gradient block font-display text-4xl leading-[1.05] tracking-wide uppercase sm:text-5xl">
                     {stat.value}
                   </span>
-                  <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                  <p className="mt-4 text-base leading-relaxed text-muted-foreground">
                     {stat.label}
                   </p>
                 </div>
