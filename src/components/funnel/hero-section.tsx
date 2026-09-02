@@ -61,7 +61,7 @@ export function HeroSection() {
                 <CalendarClock className="mt-1 size-5 shrink-0 text-gold" />
                 <span>
                   Taught by Stephen Taylor &mdash; who built a security company from{" "}
-                  <span className="font-semibold text-foreground">$0 to seven figures and 113 employees</span>.
+                  $0 to seven figures and 113 employees.
                 </span>
               </p>
             </div>
