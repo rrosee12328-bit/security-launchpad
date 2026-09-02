@@ -88,6 +88,17 @@ export function HeroSection() {
               </div>
             </div>
           </div>
+
+          {/* host caption */}
+          <div className="mt-5 text-center">
+            <p className="text-sm font-semibold tracking-wide uppercase text-gold sm:text-base">
+              Stephen Taylor
+            </p>
+            <p className="mt-1 max-w-xs text-sm leading-snug text-foreground/80 sm:text-base">
+              Built a security company from{" "}
+              <span className="text-foreground">$0 to seven figures and 113 employees</span>.
+            </p>
+          </div>
         </Reveal>
       </div>
     </section>
