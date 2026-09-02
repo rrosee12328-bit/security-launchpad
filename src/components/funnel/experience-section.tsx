@@ -55,7 +55,7 @@ export function ExperienceSection() {
             <p className="mt-5 text-base leading-relaxed text-muted-foreground">
               Stephen Taylor built Kairos Security from $0 to seven figures in
               approximately five years, grew the company to 113 employees, and won major
-              contracts including the City of Houston, TxDOT, and Metro.
+              contracts including the City of Houston and TxDOT.
             </p>
           </Reveal>
 
