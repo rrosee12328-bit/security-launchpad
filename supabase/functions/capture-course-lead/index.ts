@@ -158,7 +158,14 @@ async function handleRequest(request: Request) {
           provider_message_id: null,
           error_message: null,
         },
-        { sequence_key: "date_announcement", scheduled_for: null, status: "pending" },
+        {
+          sequence_key: "date_announcement",
+          scheduled_for: null,
+          status: "pending",
+          sent_at: null,
+          provider_message_id: null,
+          error_message: null,
+        },
         {
           sequence_key: "24_hour_reminder",
           scheduled_for: reminderTime(24 * 60 * 60 * 1000),
@@ -175,7 +182,14 @@ async function handleRequest(request: Request) {
           provider_message_id: null,
           error_message: null,
         },
-        { sequence_key: "post_webinar_follow_up", scheduled_for: null, status: "pending" },
+        {
+          sequence_key: "post_webinar_follow_up",
+          scheduled_for: null,
+          status: "pending",
+          sent_at: null,
+          provider_message_id: null,
+          error_message: null,
+        },
       ];
       await fetch(`${supabaseUrl}/rest/v1/webinar_email_events?on_conflict=lead_id,sequence_key`, {
         method: "POST",
