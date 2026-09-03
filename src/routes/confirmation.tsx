@@ -23,7 +23,10 @@ function Confirmation() {
           </div>
           <div className="rounded-xl border border-white/10 bg-white/[0.03] p-5">
             <Mail className="mx-auto size-6 text-gold" />
-            <p className="mt-2 text-sm">Check your inbox for confirmation.</p>
+            <p className="mt-2 text-sm font-semibold">Check your inbox for confirmation.</p>
+            <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
+              If you don&rsquo;t see it within a few minutes, check your spam or junk folder.
+            </p>
           </div>
         </div>
         <p className="mt-8 text-sm text-muted-foreground">
