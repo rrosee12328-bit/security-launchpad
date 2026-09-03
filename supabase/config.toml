@@ -5,3 +5,6 @@ verify_jwt = true
 
 [functions.webinar-crm]
 verify_jwt = true
+
+[functions.send-webinar-reminders]
+verify_jwt = true

@@ -35,6 +35,19 @@ function clean(value: unknown, maxLength: number) {
   return typeof value === "string" ? value.trim().slice(0, maxLength) : "";
 }
 
+function escapeHtml(value: string) {
+  return value.replace(/[&<>"']/g, (character) => {
+    const entities: Record<string, string> = {
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#039;",
+    };
+    return entities[character];
+  });
+}
+
 async function handleRequest(request: Request) {
   if (request.method === "OPTIONS")
     return new Response(null, { status: 204, headers: corsHeaders });
@@ -127,12 +140,42 @@ async function handleRequest(request: Request) {
     const leads = (await response.json()) as Array<{ id: string }>;
     const leadId = leads[0]?.id;
     if (leadId) {
-      const sequenceKeys = [
-        "registration_confirmation",
-        "date_announcement",
-        "24_hour_reminder",
-        "1_hour_reminder",
-        "post_webinar_follow_up",
+      const webinarTimestamp = parsedWebinarStartsAt
+        ? new Date(parsedWebinarStartsAt).getTime()
+        : null;
+      const submittedTimestamp = new Date(parsedSubmittedAt).getTime();
+      const reminderTime = (millisecondsBefore: number) => {
+        if (!webinarTimestamp) return null;
+        const timestamp = webinarTimestamp - millisecondsBefore;
+        return timestamp > submittedTimestamp ? new Date(timestamp).toISOString() : null;
+      };
+      const sequenceEvents = [
+        {
+          sequence_key: "registration_confirmation",
+          scheduled_for: parsedSubmittedAt,
+          status: "pending",
+          sent_at: null,
+          provider_message_id: null,
+          error_message: null,
+        },
+        { sequence_key: "date_announcement", scheduled_for: null, status: "pending" },
+        {
+          sequence_key: "24_hour_reminder",
+          scheduled_for: reminderTime(24 * 60 * 60 * 1000),
+          status: "pending",
+          sent_at: null,
+          provider_message_id: null,
+          error_message: null,
+        },
+        {
+          sequence_key: "1_hour_reminder",
+          scheduled_for: reminderTime(60 * 60 * 1000),
+          status: "pending",
+          sent_at: null,
+          provider_message_id: null,
+          error_message: null,
+        },
+        { sequence_key: "post_webinar_follow_up", scheduled_for: null, status: "pending" },
       ];
       await fetch(`${supabaseUrl}/rest/v1/webinar_email_events?on_conflict=lead_id,sequence_key`, {
         method: "POST",
@@ -140,11 +183,9 @@ async function handleRequest(request: Request) {
           apikey: serviceRoleKey,
           Authorization: `Bearer ${serviceRoleKey}`,
           "Content-Type": "application/json",
-          Prefer: "resolution=ignore-duplicates,return=minimal",
+          Prefer: "resolution=merge-duplicates,return=minimal",
         },
-        body: JSON.stringify(
-          sequenceKeys.map((sequence_key) => ({ lead_id: leadId, sequence_key })),
-        ),
+        body: JSON.stringify(sequenceEvents.map((event) => ({ lead_id: leadId, ...event }))),
       });
 
       const resendKey = Deno.env.get("RESEND_API_KEY");
@@ -158,23 +199,20 @@ async function handleRequest(request: Request) {
               month: "long",
               day: "numeric",
               year: "numeric",
-              hour: "numeric",
-              minute: "2-digit",
-              timeZoneName: "short",
             }).format(new Date(parsedWebinarStartsAt))
-          : "the next Thursday at 7:00 PM Central";
+          : "The next Thursday";
+        const safeFirstName = escapeHtml(firstName);
+        const joinButton = zoomJoinUrl
+          ? `<p><a href="${zoomJoinUrl}" style="display:inline-block;padding:12px 20px;background:#c9a227;color:#08111f;text-decoration:none;font-weight:700;border-radius:6px">Join the Webinar on Zoom</a></p>`
+          : "<p>Your webinar access link will be emailed to you.</p>";
         const mail = await fetch("https://api.resend.com/emails", {
           method: "POST",
           headers: { Authorization: `Bearer ${resendKey}`, "Content-Type": "application/json" },
           body: JSON.stringify({
             from: `7 Figure Security <${from}>`,
             to: [email],
-            subject: "You’re registered: The 5 Biggest Mistakes",
-            html: `<h1>You’re registered, ${firstName}.</h1><p>Your seat is reserved for <strong>The 5 Biggest Mistakes People Make Starting a Security Company</strong>.</p><p><strong>${webinarDate}</strong></p>${
-              zoomJoinUrl
-                ? `<p><a href="${zoomJoinUrl}" style="display:inline-block;padding:12px 20px;background:#c9a227;color:#08111f;text-decoration:none;font-weight:700;border-radius:6px">Join on Zoom</a></p><p>Keep this email—this is your private meeting link.</p>`
-                : `<p>We’ll send the attendance link directly to this email.</p>`
-            }<p>We’ll also send reminders before the session begins.</p>`,
+            subject: "You’re officially registered",
+            html: `<p>Hey ${safeFirstName},</p><p>You’re officially registered for:</p><p><strong>The 5 Biggest Mistakes People Make When Starting a Security Company</strong></p><p>📅 ${webinarDate}<br>⏰ 7:00 PM CT<br>📍 Live on Zoom</p><p>Here’s your access link:</p>${joinButton}<p>If you’ve been thinking about starting your own security company, this training is designed to help you avoid some of the mistakes that keep people stuck before they ever really get started.</p><p>I’m going to break down what I’ve learned from actually building and operating a seven-figure security company, including some of the things I wish I understood earlier.</p><p>You don’t need to have everything figured out before you attend.</p><p>Just come ready to learn.</p><p>I’ll see you there.</p><p>Steve Taylor</p>`,
           }),
         });
         const result = (await mail.json()) as { id?: string; message?: string };
