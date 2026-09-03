@@ -62,12 +62,7 @@ export function WebinarCountdown({
         </span>
       </div>
 
-      <div
-        className={cn(
-          "grid grid-cols-4 gap-2 sm:gap-3",
-          compact ? "max-w-xs" : "max-w-md",
-        )}
-      >
+      <div className={cn("grid grid-cols-4 gap-2 sm:gap-3", compact ? "max-w-xs" : "max-w-md")}>
         {units.map((u) => (
           <div
             key={u.label}

@@ -20,7 +20,7 @@ export default {
     if (user.email?.toLowerCase() !== Deno.env.get("CRM_ADMIN_EMAIL")?.toLowerCase())
       return new Response(JSON.stringify({ error: "forbidden" }), { status: 403, headers });
     const response = await fetch(
-      `${url}/rest/v1/course_leads?select=id,first_name,last_name,email,phone,created_at,landing_page_url,utm_source,utm_medium,utm_campaign,webinar_email_events(sequence_key,status,scheduled_for,sent_at,error_message)&funnel_type=eq.webinar&order=created_at.desc`,
+      `${url}/rest/v1/course_leads?select=id,first_name,last_name,email,phone,created_at,webinar_starts_at,landing_page_url,utm_source,utm_medium,utm_campaign,webinar_email_events(sequence_key,status,scheduled_for,sent_at,error_message)&funnel_type=eq.webinar&order=created_at.desc`,
       { headers: { apikey: service, Authorization: `Bearer ${service}` } },
     );
     return new Response(JSON.stringify({ leads: await response.json() }), {

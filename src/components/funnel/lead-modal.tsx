@@ -20,6 +20,7 @@ import {
   buildUrlWithUtm,
 } from "@/lib/config";
 import { getUtmParams, trackEvent } from "@/lib/tracking";
+import { getNextWebinarDate } from "@/lib/webinar-schedule";
 
 /* ------------------------------------------------------------------ */
 /* Context — one shared modal instance driven by every CTA on the page */
@@ -128,6 +129,7 @@ function LeadModal({ open, onClose }: { open: boolean; onClose: () => void }) {
       email: values.email.trim(),
       phone: values.phone.trim(),
       registrationFor: WEBINAR_TITLE,
+      webinarStartsAt: getNextWebinarDate().toISOString(),
       submittedAt: new Date().toISOString(),
       landingPageUrl: window.location.href,
       referralUrl: document.referrer || "",

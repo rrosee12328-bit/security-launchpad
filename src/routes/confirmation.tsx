@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { CalendarDays, CheckCircle2, Mail } from "lucide-react";
-import { BRAND_NAME, WEBINAR_DATE_LABEL, WEBINAR_TITLE } from "@/lib/config";
+import { CheckCircle2, Mail } from "lucide-react";
+import { BRAND_NAME, WEBINAR_TITLE } from "@/lib/config";
+import { WebinarCountdown } from "@/components/funnel/countdown";
 
 export const Route = createFileRoute("/confirmation")({ component: Confirmation });
 
@@ -18,8 +19,7 @@ function Confirmation() {
         <h2 className="mx-auto mt-5 max-w-xl text-xl font-semibold">{WEBINAR_TITLE}</h2>
         <div className="mt-8 grid gap-3 sm:grid-cols-2">
           <div className="rounded-xl border border-white/10 bg-white/[0.03] p-5">
-            <CalendarDays className="mx-auto size-6 text-gold" />
-            <p className="mt-2 text-sm">{WEBINAR_DATE_LABEL}</p>
+            <WebinarCountdown compact className="flex flex-col items-center" />
           </div>
           <div className="rounded-xl border border-white/10 bg-white/[0.03] p-5">
             <Mail className="mx-auto size-6 text-gold" />
@@ -27,7 +27,7 @@ function Confirmation() {
           </div>
         </div>
         <p className="mt-8 text-sm text-muted-foreground">
-          We&rsquo;ll send the date, attendance link, and reminders as soon as they are available.
+          We&rsquo;ll send the attendance link and reminders directly to your inbox.
         </p>
         <Link
           to="/"

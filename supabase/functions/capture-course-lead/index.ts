@@ -13,6 +13,7 @@ type LeadPayload = {
   lastName?: unknown;
   email?: unknown;
   phone?: unknown;
+  webinarStartsAt?: unknown;
   submittedAt?: unknown;
   landingPageUrl?: unknown;
   referralUrl?: unknown;
@@ -70,6 +71,11 @@ async function handleRequest(request: Request) {
     submittedAt && !Number.isNaN(Date.parse(submittedAt))
       ? new Date(submittedAt).toISOString()
       : new Date().toISOString();
+  const webinarStartsAt = clean(payload.webinarStartsAt, 40);
+  const parsedWebinarStartsAt =
+    webinarStartsAt && !Number.isNaN(Date.parse(webinarStartsAt))
+      ? new Date(webinarStartsAt).toISOString()
+      : null;
 
   const row = {
     first_name: firstName,
@@ -79,6 +85,7 @@ async function handleRequest(request: Request) {
     course: "7-figure-security",
     funnel_type: "webinar",
     webinar_title: "The 5 Biggest Mistakes People Make Starting a Security Company",
+    webinar_starts_at: parsedWebinarStartsAt,
     submitted_at: parsedSubmittedAt,
     landing_page_url: clean(payload.landingPageUrl, 2048),
     referral_url: clean(payload.referralUrl, 2048),
@@ -143,6 +150,18 @@ async function handleRequest(request: Request) {
       const resendKey = Deno.env.get("RESEND_API_KEY");
       const from = Deno.env.get("RESEND_FROM_EMAIL");
       if (resendKey && from) {
+        const webinarDate = parsedWebinarStartsAt
+          ? new Intl.DateTimeFormat("en-US", {
+              timeZone: "America/Chicago",
+              weekday: "long",
+              month: "long",
+              day: "numeric",
+              year: "numeric",
+              hour: "numeric",
+              minute: "2-digit",
+              timeZoneName: "short",
+            }).format(new Date(parsedWebinarStartsAt))
+          : "the next Thursday at 7:00 PM Central";
         const mail = await fetch("https://api.resend.com/emails", {
           method: "POST",
           headers: { Authorization: `Bearer ${resendKey}`, "Content-Type": "application/json" },
@@ -150,7 +169,7 @@ async function handleRequest(request: Request) {
             from: `7 Figure Security <${from}>`,
             to: [email],
             subject: "You’re registered: The 5 Biggest Mistakes",
-            html: `<h1>You’re registered, ${firstName}.</h1><p>Your seat is reserved for <strong>The 5 Biggest Mistakes People Make Starting a Security Company</strong>.</p><p>The date and time will be announced soon. We’ll send the attendance details and reminders directly to this email.</p>`,
+            html: `<h1>You’re registered, ${firstName}.</h1><p>Your seat is reserved for <strong>The 5 Biggest Mistakes People Make Starting a Security Company</strong>.</p><p><strong>${webinarDate}</strong></p><p>We’ll send the attendance details and reminders directly to this email.</p>`,
           }),
         });
         const result = (await mail.json()) as { id?: string; message?: string };

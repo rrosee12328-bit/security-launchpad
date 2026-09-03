@@ -11,6 +11,7 @@ type Lead = {
   email: string;
   phone: string;
   created_at: string;
+  webinar_starts_at: string | null;
   webinar_email_events: Array<{ sequence_key: string; status: string; sent_at: string | null }>;
 };
 
@@ -97,7 +98,7 @@ function Crm() {
             <table className="w-full text-left text-sm">
               <thead className="bg-white/5">
                 <tr>
-                  {["Registrant", "Phone", "Registered", "Email sequence"].map((x) => (
+                  {["Registrant", "Phone", "Webinar", "Registered", "Email sequence"].map((x) => (
                     <th className="p-4" key={x}>
                       {x}
                     </th>
@@ -115,6 +116,19 @@ function Crm() {
                       <span className="text-muted-foreground">{l.email}</span>
                     </td>
                     <td className="p-4">{l.phone}</td>
+                    <td className="p-4">
+                      {l.webinar_starts_at
+                        ? new Date(l.webinar_starts_at).toLocaleString("en-US", {
+                            timeZone: "America/Chicago",
+                            weekday: "short",
+                            month: "short",
+                            day: "numeric",
+                            hour: "numeric",
+                            minute: "2-digit",
+                            timeZoneName: "short",
+                          })
+                        : "—"}
+                    </td>
                     <td className="p-4">{new Date(l.created_at).toLocaleString()}</td>
                     <td className="p-4">
                       {l.webinar_email_events.map((e) => (
