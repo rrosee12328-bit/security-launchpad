@@ -1,6 +1,8 @@
 import { CalendarClock } from "lucide-react";
 import { WEBINAR_BADGE, WEBINAR_CTA } from "@/lib/config";
 import { CTAButton } from "./cta-button";
+import { WebinarCountdown } from "./countdown";
+
 import { Reveal } from "./shared";
 import stephenHero from "@/assets/stephen-hero.png.asset.json";
 import skyline from "@/assets/skyline-night.jpg";
@@ -52,13 +54,20 @@ export function HeroSection() {
             </p>
           </Reveal>
 
-          <Reveal delay={280}>
-            <div className="mt-9 flex flex-col items-start gap-5">
+          <Reveal delay={240}>
+            <div className="mt-8">
+              <WebinarCountdown />
+            </div>
+          </Reveal>
+
+          <Reveal delay={320}>
+            <div className="mt-8 flex flex-col items-start gap-5">
               <CTAButton trackingLabel="hero" size="lg" showArrow>
                 {WEBINAR_CTA}
               </CTAButton>
             </div>
           </Reveal>
+
         </div>
 
         {/* Portrait composition */}

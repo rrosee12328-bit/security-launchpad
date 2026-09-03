@@ -1,4 +1,6 @@
 import { CTAButton } from "./cta-button";
+import { WebinarCountdown } from "./countdown";
+
 import { Reveal } from "./shared";
 import skyline from "@/assets/skyline-night.jpg";
 
@@ -38,7 +40,14 @@ export function FinalCTA() {
           </p>
         </Reveal>
 
+        <Reveal delay={200}>
+          <div className="mt-9 flex justify-center">
+            <WebinarCountdown className="flex flex-col items-center" />
+          </div>
+        </Reveal>
+
         <Reveal delay={240}>
+
           <div className="mt-10 flex flex-col items-center gap-4">
             <CTAButton trackingLabel="final-cta" size="lg" showArrow>
               Reserve My Spot for the Free Webinar
