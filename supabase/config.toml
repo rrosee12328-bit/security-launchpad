@@ -2,3 +2,6 @@ project_id = "rmbmgpzmqrteefwxmhls"
 
 [functions.capture-course-lead]
 verify_jwt = true
+
+[functions.webinar-crm]
+verify_jwt = true

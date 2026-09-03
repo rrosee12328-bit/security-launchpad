@@ -217,8 +217,8 @@ function LeadModal({ open, onClose }: { open: boolean; onClose: () => void }) {
                 Your Spot Is Reserved.
               </h3>
               <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                Check your email for your webinar access details. Watch for a message
-                from {WEBINAR_HOST}.
+                Check your email for your webinar access details. Watch for a message from{" "}
+                {WEBINAR_HOST}.
               </p>
               {nextUrl && (
                 <a
@@ -237,9 +237,7 @@ function LeadModal({ open, onClose }: { open: boolean; onClose: () => void }) {
               <h3 className="mt-3 font-display text-2xl leading-tight tracking-wide uppercase sm:text-3xl">
                 Reserve Your Spot
               </h3>
-              <p className="mt-2 text-sm text-muted-foreground">
-                The 5 Biggest Mistakes People Make When Starting a Security Company.
-              </p>
+              <p className="mt-2 text-sm text-muted-foreground">{WEBINAR_TITLE}.</p>
 
               <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-4" noValidate>
                 {submitError && (

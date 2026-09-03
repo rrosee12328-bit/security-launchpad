@@ -10,6 +10,7 @@ const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 type LeadPayload = {
   firstName?: unknown;
+  lastName?: unknown;
   email?: unknown;
   phone?: unknown;
   submittedAt?: unknown;
@@ -46,11 +47,17 @@ async function handleRequest(request: Request) {
   }
 
   const firstName = clean(payload.firstName, 100);
+  const lastName = clean(payload.lastName, 100);
   const email = clean(payload.email, 320).toLowerCase();
   const phone = clean(payload.phone, 40);
   const phoneDigits = phone.replace(/\D/g, "");
 
-  if (firstName.length < 2 || !emailPattern.test(email) || phoneDigits.length < 10) {
+  if (
+    firstName.length < 2 ||
+    lastName.length < 2 ||
+    !emailPattern.test(email) ||
+    phoneDigits.length < 10
+  ) {
     return json(400, {
       success: false,
       code: "validation_error",
@@ -66,9 +73,12 @@ async function handleRequest(request: Request) {
 
   const row = {
     first_name: firstName,
+    last_name: lastName,
     email,
     phone,
     course: "7-figure-security",
+    funnel_type: "webinar",
+    webinar_title: "The 5 Biggest Mistakes People Make Starting a Security Company",
     submitted_at: parsedSubmittedAt,
     landing_page_url: clean(payload.landingPageUrl, 2048),
     referral_url: clean(payload.referralUrl, 2048),
@@ -97,7 +107,7 @@ async function handleRequest(request: Request) {
         apikey: serviceRoleKey,
         Authorization: `Bearer ${serviceRoleKey}`,
         "Content-Type": "application/json",
-        Prefer: "resolution=merge-duplicates,return=minimal",
+        Prefer: "resolution=merge-duplicates,return=representation",
       },
       body: JSON.stringify(row),
     });
@@ -105,6 +115,67 @@ async function handleRequest(request: Request) {
     if (!response.ok) {
       console.error("Lead upsert failed", response.status, await response.text());
       return json(500, { success: false, code: "database_error", message: "Unable to save lead." });
+    }
+
+    const leads = (await response.json()) as Array<{ id: string }>;
+    const leadId = leads[0]?.id;
+    if (leadId) {
+      const sequenceKeys = [
+        "registration_confirmation",
+        "date_announcement",
+        "24_hour_reminder",
+        "1_hour_reminder",
+        "post_webinar_follow_up",
+      ];
+      await fetch(`${supabaseUrl}/rest/v1/webinar_email_events?on_conflict=lead_id,sequence_key`, {
+        method: "POST",
+        headers: {
+          apikey: serviceRoleKey,
+          Authorization: `Bearer ${serviceRoleKey}`,
+          "Content-Type": "application/json",
+          Prefer: "resolution=ignore-duplicates,return=minimal",
+        },
+        body: JSON.stringify(
+          sequenceKeys.map((sequence_key) => ({ lead_id: leadId, sequence_key })),
+        ),
+      });
+
+      const resendKey = Deno.env.get("RESEND_API_KEY");
+      const from = Deno.env.get("RESEND_FROM_EMAIL");
+      if (resendKey && from) {
+        const mail = await fetch("https://api.resend.com/emails", {
+          method: "POST",
+          headers: { Authorization: `Bearer ${resendKey}`, "Content-Type": "application/json" },
+          body: JSON.stringify({
+            from: `7 Figure Security <${from}>`,
+            to: [email],
+            subject: "You’re registered: The 5 Biggest Mistakes",
+            html: `<h1>You’re registered, ${firstName}.</h1><p>Your seat is reserved for <strong>The 5 Biggest Mistakes People Make Starting a Security Company</strong>.</p><p>The date and time will be announced soon. We’ll send the attendance details and reminders directly to this email.</p>`,
+          }),
+        });
+        const result = (await mail.json()) as { id?: string; message?: string };
+        await fetch(
+          `${supabaseUrl}/rest/v1/webinar_email_events?lead_id=eq.${leadId}&sequence_key=eq.registration_confirmation`,
+          {
+            method: "PATCH",
+            headers: {
+              apikey: serviceRoleKey,
+              Authorization: `Bearer ${serviceRoleKey}`,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(
+              mail.ok
+                ? {
+                    status: "sent",
+                    provider_message_id: result.id ?? null,
+                    sent_at: new Date().toISOString(),
+                    error_message: null,
+                  }
+                : { status: "failed", error_message: result.message ?? "Resend request failed" },
+            ),
+          },
+        );
+      }
     }
   } catch (error) {
     console.error("Lead capture request failed", error);

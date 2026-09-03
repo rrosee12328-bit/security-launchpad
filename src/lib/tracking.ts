@@ -5,17 +5,12 @@
  * Meta Pixel fbq, GA4 gtag) when present — drop your pixel/tag snippets
  * in the root route and these events start flowing automatically.
  *
- * Funnel events: PageView, CTA_Click, Lead_Form_Open, Lead, Skool_Redirect.
+ * Funnel events: PageView, CTA_Click, Lead_Form_Open, Lead.
  */
 
 import type { UtmParams } from "./config";
 
-export type FunnelEvent =
-  | "PageView"
-  | "CTA_Click"
-  | "Lead_Form_Open"
-  | "Lead"
-  | "Skool_Redirect";
+export type FunnelEvent = "PageView" | "CTA_Click" | "Lead_Form_Open" | "Lead";
 
 declare global {
   interface Window {
@@ -61,10 +56,7 @@ export function getUtmParams(): UtmParams {
   return empty;
 }
 
-export function trackEvent(
-  event: FunnelEvent,
-  params: Record<string, unknown> = {},
-): void {
+export function trackEvent(event: FunnelEvent, params: Record<string, unknown> = {}): void {
   if (typeof window === "undefined") return;
   const payload = { ...params, ...getUtmParams() };
 

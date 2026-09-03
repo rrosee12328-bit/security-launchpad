@@ -10,16 +10,16 @@ export const BRAND_TAGLINE = "Live training. Real experience. No fluff.";
 
 /** Webinar event details. */
 export const WEBINAR_BADGE = "Free Webinar";
-export const WEBINAR_TITLE =
-  "The 5 Biggest Mistakes People Make When Starting a Security Company";
+export const WEBINAR_TITLE = "The 5 Biggest Mistakes People Make Starting a Security Company";
 export const WEBINAR_CTA = "Reserve My Spot";
 export const WEBINAR_HOST = "Stephen Taylor";
+export const WEBINAR_DATE_LABEL = "Date and time to be announced";
 
 /**
  * Optional destination after a successful registration (thank-you page,
  * webinar room, or replay). Leave empty to show the on-page confirmation.
  */
-export const WEBINAR_CONFIRMATION_URL = "";
+export const WEBINAR_CONFIRMATION_URL = "/confirmation";
 /** Delay before auto-redirecting a registrant when a URL is configured. */
 export const WEBINAR_REDIRECT_DELAY_MS = 1600;
 
