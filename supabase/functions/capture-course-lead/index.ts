@@ -149,6 +149,7 @@ async function handleRequest(request: Request) {
 
       const resendKey = Deno.env.get("RESEND_API_KEY");
       const from = Deno.env.get("RESEND_FROM_EMAIL");
+      const zoomJoinUrl = Deno.env.get("ZOOM_JOIN_URL");
       if (resendKey && from) {
         const webinarDate = parsedWebinarStartsAt
           ? new Intl.DateTimeFormat("en-US", {
@@ -169,7 +170,11 @@ async function handleRequest(request: Request) {
             from: `7 Figure Security <${from}>`,
             to: [email],
             subject: "You’re registered: The 5 Biggest Mistakes",
-            html: `<h1>You’re registered, ${firstName}.</h1><p>Your seat is reserved for <strong>The 5 Biggest Mistakes People Make Starting a Security Company</strong>.</p><p><strong>${webinarDate}</strong></p><p>We’ll send the attendance details and reminders directly to this email.</p>`,
+            html: `<h1>You’re registered, ${firstName}.</h1><p>Your seat is reserved for <strong>The 5 Biggest Mistakes People Make Starting a Security Company</strong>.</p><p><strong>${webinarDate}</strong></p>${
+              zoomJoinUrl
+                ? `<p><a href="${zoomJoinUrl}" style="display:inline-block;padding:12px 20px;background:#c9a227;color:#08111f;text-decoration:none;font-weight:700;border-radius:6px">Join on Zoom</a></p><p>Keep this email—this is your private meeting link.</p>`
+                : `<p>We’ll send the attendance link directly to this email.</p>`
+            }<p>We’ll also send reminders before the session begins.</p>`,
           }),
         });
         const result = (await mail.json()) as { id?: string; message?: string };
