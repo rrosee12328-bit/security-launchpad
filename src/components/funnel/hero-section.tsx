@@ -96,7 +96,7 @@ export function HeroSection() {
                   Stephen Taylor
                 </p>
                 <p className="mx-auto mt-1 max-w-sm text-sm leading-snug text-foreground/85 sm:text-base">
-                  Built a security company from $0 to seven figures and 113 employees.
+                  Built a security company from $0 to 7 figures and 113 employees.
                 </p>
               </div>
             </div>
